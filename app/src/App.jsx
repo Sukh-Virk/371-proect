@@ -23,29 +23,11 @@ function App() {
           className="counter"
           onClick={() => setCount((count) => count + 1)}
         >
-          Count is {count}
+          Click Here to Start Messaging
         </button>
       </section>
 
       <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Test:</h2>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Start Message Exchange
-              </a>
-            </li>
-          </ul>
-        </div>
-        
-      </section>
 
       <div className="ticks"></div>
       <section id="spacer"></section>
