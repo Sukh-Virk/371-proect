@@ -23,6 +23,7 @@ class Client:
             self.writer.flush()
         except Exception as e:
             print(f'Send error: {e}')
+            sys.stdout.flush()
 
     def receive_loop(self):
         while self.running:
@@ -44,8 +45,9 @@ class Client:
                     sys.stdout.flush()
                     
                 elif data['type'] == 'register_ok':
-                    # Send registration confirmation
-                    print('Registered')
+                    # Send registration confirmation with message
+                    msg = data.get('message', 'Registered')
+                    print(msg)
                     sys.stdout.flush()
                     
                 elif data['type'] == 'error':
@@ -60,10 +62,14 @@ class Client:
                 break
 
     def run(self):
-        # Send registration to Python server
+        # Send registration with password to Python server
         print(f"Sending registration for {self.username}")
         sys.stdout.flush()
-        self.send({'type': 'register', 'username': self.username})
+        self.send({
+            'type': 'register', 
+            'username': self.username,
+            'password': self.password  # Include password in registration
+        })
         
         # Start receive thread
         receive_thread = threading.Thread(target=self.receive_loop, daemon=True)
