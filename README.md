@@ -120,15 +120,15 @@ We designed a custom application-layer protocol for data exchange across three d
 
 * **Message Format:** `{"type": <string>, "<fields>": <data>}`  
 * **Handshake Phase:**
-  * Client sends: `{"type": "register", "username": "Alice"}`
-  * Server responds (success): `{"type": "register_ok"}`
-  * Server responds (error): `{"type": "error", "message": "Username taken"}`
+  * Client sends: `{"type": "register", "username": "Alice", "password": "secret123"}`
+  * Server responds (success): `{"type": "register_ok", "message": "Room created! You are the host."}` / `{"type": "register_ok", "message": "Joined room! Hosted by Alice"}`
+  * Server responds (error): `{"type": "error", "message": "Username taken"}` / `{"type": "error", "message": "Incorrect room password. Cannot join."}`
 * **User Management Phase:**  
   * Client sends: `{"type": "user_list"}`  
-  * Server broadcasts: `{"type": "user_list"}`
+  * Server broadcasts: `{"type": "user_list", "users": ["Alice", "Bob", "Charlie"]}`
  * **Messaging Phase:**
-   * Client sends: `{"type": "message", "to": "Bob", "payload": "Hello!"}`
-   * Server forwards to recipient: (success): `{"type": "message", "from": "Alice", "payload": "Hello!"}`
+   * Client sends: `{"type": "message", "to": "Bob", "payload": "<encrypted>"}`
+   * Server forwards to recipient: (success): `{"type": "message", "from": "Alice", "payload": ""<encrypted>"}`
    * Server responds (error): `{"type": "error", "message": "User not found"}`
 
 ### Layer 2: Node.js ↔ Python Client (stdin/stdout Process Communication)
@@ -137,14 +137,16 @@ We designed a custom application-layer protocol for data exchange across three d
 * **Handshake Phase:**
   * Node.js sends (stdin): `<username>`
   * Node.js sends (stdin): `<password>`
-  * Python responds (stdout, success): `"Registered"`
-  * Python responds (stdout, error): `"Error: Username taken"`
+  * Python responds (stdout, success):  `"Room created! You are the host."` / `"Joined room! Hosted by Alice"`
+  * Python responds (stdout, error): `"Error: Incorrect room password. Cannot join."`
 * **User Management Phase:**  
    * Node.js sends (stdin): `"/users"`  
    * Python responds (stdout): `"Users: Alice, Bob, Charlie"`
  * **Messaging Phase:**
-   * Node.js sends (stdin): `"/msg Bob Hello!"` 
-   * Python forwards received message (stdout, success): `"Alice: Hello!"`
+   * Node.js sends (stdin): `"/msg Bob Bob Hello!"` 
+   * Python client encrypts:	`encrypt_message("Hello Bob!", password)`
+   * Python sends to server:	`Encrypted JSON payload`
+   * Python forwards received message (stdout):	`"Alice: Hello Bob!" (decrypted)`
    * Python responds (stdout, error): `"Error: User not found"`
 
 ### Layer 3: React ↔ Node.js (WebSocket Protocol)
@@ -153,14 +155,14 @@ We designed a custom application-layer protocol for data exchange across three d
 * **Handshake Phase:**
   * React sends: `<username>`
   * React sends: `<password>`
-  * Node.js responds (success): `"Registered"`
-  * Node.js response (error): `"Error: Username taken"`
+  * Node.js responds (success): `"Room created! You are the host."` / `"Joined room! Hosted by Alice"`
+  * Node.js response (error): `"Error: Incorrect room password. Cannot join.""`
 * **User Management Phase:**  
   * React sends: `"/users"`  
   * Node.js responds: `"Users: Alice, Bob, Charlie"`
  * **Messaging Phase:**
-   * React sends: `"/msg Bob Hello!"` 
-   * Node.js forwards incoming message (success): `"Alice: Hello!"`
+   * React sends: `"/msg Bob Bob Hello!"` 
+   * Node.js forwards decrypted message (success): `"Alice: Hello Bob!"`
    * Node.js responds (error): `"Error: User not found"`
 
 ## **6\. Academic Integrity & References**
