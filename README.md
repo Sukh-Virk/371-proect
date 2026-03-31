@@ -94,17 +94,56 @@ python client.py
 4. **Player O** takes their turn.  
 5. The connection naturally terminates when a win/draw is achieved.
 
-## **5\. Technical Protocol Details (JSON over TCP)**
+## **5\. Technical Protocol Details (JSON over TCP & Inter-Process Communication)**
 
-We designed a custom application-layer protocol for data exchange usin JSON over TCP:
+We designed a custom application-layer protocol for data exchange across three distinct communication channels: JSON over TCP between Python client and Python server, WebSocket messaging between React frontend and Node.js server, and stdin/stdout piping between Node.js and Python client processes.
 
-* **Message Format:** `{"type": <string>, "payload": <data>}`  
-* **Handshake Phase:** \* Client sends: `{"type": "CONNECT"}`  
-  * Server responds: `{"type": "WELCOME", "payload": "Player X"}`  
-* **Gameplay Phase:**  
-  * Client sends: `{"type": "MOVE", "row": 1, "col": 1}`  
-  * Server broadcasts: `{"type": "UPDATE", "board": [[...], [...], [...]], , "turn": "O", "status": "ongoing"}`
+### Layer 1: Python Client ↔ Python Server (TCP/JSON Protocol) 
 
+* **Message Format:** `{"type": <string>, "<fields>": <data>}`  
+* **Handshake Phase:**
+  * Client sends: `{"type": "register", "username": "Alice"}`
+  * Server responds (success): `{"type": "register_ok"}`
+  * Server responds (error): `{"type": "error", "message": "Username taken"}`
+* **User Management Phase:**  
+  * Client sends: `{"type": "user_list"}`  
+  * Server broadcasts: `{"type": "user_list"}`
+ * **Messaging Phase:**
+   * Client sends: `{"type": "message", "to": "Bob", "payload": "Hello!"}`
+   * Server forwards to recipient: (success): `{"type": "message", "from": "Alice", "payload": "Hello!"}`
+   * Server responds (error): `{"type": "error", "message": "User not found"}`
+
+### Layer 2: Node.js ↔ Python Client (stdin/stdout Process Communication)
+
+* **Message Format:** Text-based commands (stdin) and formatted strings (stdout).
+* **Handshake Phase:**
+  * Node.js sends (stdin): `<username>`
+  * Node.js sends (stdin): `<password>`
+  * Python responds (stdout, success): `"Registered"`
+  * Python responds (stdout, error): `"Error: Username taken"`
+* **User Management Phase:**  
+   * Node.js sends (stdin): `"/users"`  
+   * Python responds (stdout): `"Users: Alice, Bob, Charlie"`
+ * **Messaging Phase:**
+   * Node.js sends (stdin): `"/msg Bob Hello!"` 
+   * Python forwards received message (stdout, success): `"Alice: Hello!"`
+   * Python responds (stdout, error): `"Error: User not found"`
+
+### Layer 3: React ↔ Node.js (WebSocket Protocol)
+
+* **Message Format:** Text commands and responses.
+* **Handshake Phase:**
+  * React sends: `<username>`
+  * React sends: `<password>`
+  * Node.js responds (success): `"Registered"`
+  * Node.js response (error): `"Error: Username taken"`
+* **User Management Phase:**  
+  * React sends: `"/users"`  
+  * Node.js responds: `"Users: Alice, Bob, Charlie"`
+ * **Messaging Phase:**
+   * React sends: `"/msg Bob Hello!"` 
+   * Node.js forwards incoming message (success): `"Alice: Hello!"`
+   * Node.js responds (error): `"Error: User not found"`
 
 ## **6\. Academic Integrity & References**
 
@@ -114,7 +153,7 @@ We designed a custom application-layer protocol for data exchange usin JSON over
   * The socket boilerplate was adapted from the course tutorial "TCP Echo Server". The core multithreaded game logic, protocol, and state management were written by the group.  
 * **GenAI Usage:**  
   * ChatGPT was used to assist in generating the Unicode box-drawing characters for the CLI interface, and to help structure the TCP buffer-splitting logic (`\n delimiter`).  
-  * Gemini was used to help in `README.md` writing and polishing.  
+  * Deepseek was used to help in `README.md` writing and polishing.  
   * GitHub Copilot was used to help plan the workflow of the application.   
 * **References:**  
   * [Python Socket Programming HOWTO](https://docs.python.org/3/howto/sockets.html)  
