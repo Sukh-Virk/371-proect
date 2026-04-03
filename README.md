@@ -81,7 +81,16 @@ node server.js
 
 ### **Step 3: Start the React Application**
 
-Open a **third** terminal window. **Navigate to the React app directory** and start the development server. 
+1. Open a **third** terminal window. Navigate to the React app directory from the project folder.
+ ```bash
+cd app
+```  
+
+2. Within third terminal, install dependencies through npm (only has to be done first time after cloning repo, otherwise skip).
+ ```bash
+npm install
+```  
+3. Within third terminal, start React development server.
 ```bash
 npm run dev  
 # Console output:
@@ -90,7 +99,7 @@ npm run dev
 
 # VITE v8.0.2  ready in [time] ms
 
-#  ➜  Local:   http://localhost:5173/ (note: this should be a link)
+#  ➜  Local:   http://localhost:5173/ (note: this should be a link, might be different port)
 #  ➜  Network: use --host to expose
 #  ➜  press h + enter to show help
 ```
