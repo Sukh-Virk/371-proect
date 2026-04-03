@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
+import './App.css'
+import BottomHub from './components/BottomHub'
 
 function App() {
   const [username, setUsername] = useState('')
@@ -162,33 +164,44 @@ function App() {
   }
 
   return (
-    <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto', fontFamily: 'Arial' }}>
+    <div className="app-root" style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto', fontFamily: 'Arial' }}>
+      <div className="side-pattern left" aria-hidden />
+      <div className="side-pattern right" aria-hidden />
       {!isLoggedIn ? (
-        <div style={{ maxWidth: '400px', margin: '50px auto' }}>
+        <>
+        <div className="login-card">
+          <div className="packet-track" aria-hidden>
+            <div className="packet p1">→</div>
+            <div className="packet p2">◦</div>
+            <div className="packet p3">◦</div>
+            <div className="packet p4">→</div>
+          </div>
           <h2>💬 Chat Room Login</h2>
-          <div style={{ marginBottom: '10px' }}>
+          <div className="login-form">
             <input 
+              className="input-wide"
               value={username} 
               onChange={(e) => setUsername(e.target.value)} 
               placeholder="Username" 
-              style={{ padding: '8px', width: '100%', marginBottom: '10px' }}
             />
             <input 
+              className="input-wide"
               type="password" 
               value={password} 
               onChange={(e) => setPassword(e.target.value)} 
               placeholder="Room Password" 
-              style={{ padding: '8px', width: '100%' }}
             />
           </div>
-          <button onClick={connect} style={{ padding: '10px', width: '100%', marginTop: '10px' }}>
+          <button onClick={connect} className="btn-primary btn-full" style={{ marginTop: '10px', width: '100%' }}>
             Join / Create Room
           </button>
-          <p style={{ marginTop: '10px', fontSize: '12px', color: '#666' }}>
+          <p style={{ marginTop: '10px', fontSize: '12px', color: 'var(--muted)' }}>
             Status: {connectionStatus}<br/>
             <em>💡 First user sets the room password. All subsequent users must use the same password to join.</em>
           </p>
         </div>
+        <BottomHub />
+        </>
       ) : (
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
@@ -211,9 +224,9 @@ function App() {
           
           <div style={{ display: 'flex', gap: '20px' }}>
             {/* Users Panel */}
-            <div style={{ width: '200px' }}>
+            <div className="members-panel">
               <h3>👥 Members ({users.length})</h3>
-              <div style={{ border: '1px solid #ddd', borderRadius: '4px', padding: '10px' }}>
+              <div className="panel-card">
                 {users.length === 0 ? (
                   <p style={{ color: '#999' }}>No other users in room</p>
                 ) : (
@@ -238,17 +251,9 @@ function App() {
             </div>
             
             {/* Messages Panel*/}
-            <div style={{ flex: 1 }}>
+            <div className="messages-panel" style={{ flex: 1 }}>
               <h3>📨 Messages</h3>
-              <div style={{ 
-                height: '400px', 
-                overflowY: 'scroll', 
-                border: '1px solid #ddd', 
-                padding: '10px',
-                backgroundColor: '#fafafa',
-                borderRadius: '4px',
-                width: '600px'
-              }}>
+              <div className="messages-window" style={{ width: '600px' }}>
                 {messages.length === 0 ? (
                   <p style={{ textAlign: 'center', color: '#999', marginTop: '180px' }}>
                     No messages yet. Select a user and start chatting!
@@ -271,7 +276,9 @@ function App() {
                 )}
                 <div ref={messagesEndRef} />
               </div>
-              
+
+              <div className="send-divider" aria-hidden />
+
               <div style={{ marginTop: '10px' }}>
                 <div style={{ marginBottom: '5px' }}>
                   <strong>Sending to: {selectedRecipient || 'None selected'}</strong>
