@@ -54,7 +54,7 @@ To run this project, you need:
 * *External pip installation required:* The `cryptography` library must be installed for encryption functionality.
 * Node.js 14 or higher (for WebSocket server)
 * npm (for managing Node.js and React dependencies)
-* VS Code / Code Editor (not tested on terminal)
+* VS Code 
 
 <span style="color: purple;">***RUBRIC NOTE: No external libraries are required. Therefore, a requirements.txt file is not strictly necessary for dependency installation, though one might be included for environment completeness.***</span>
 
@@ -107,8 +107,8 @@ npm run dev
 ### **Step 4: Connect Both Users**
 
 1. Connect the first user by opening the link given in step 3 in a new window.
-2. Enter a username (e.g., "Alice") and a shared password (e.g., "secret123")
-3. Click Connect
+2. Enter a username (e.g., "Alice") and a shared password (e.g., "secret123").
+3. Click Connect.
 4. Connect the second user by opening the link given in step 3 in a **different** window.
 5. Enter a different username (e.g., "Bob") and the same shared password (e.g., "secret123").
 6. Click Connect (both users will see each other in the Online Users panel).
