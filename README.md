@@ -114,14 +114,14 @@ npm run dev
 6. Click Connect (both users will see each other in the Online Users panel).
 
 ### **Step 5: Start Chatting**
-1. Within the first window, select a recipient from the Online Users panel by clicking on their name (e.g., "Bob"). The selected recipient will be highlighted in green.
+1. Within the first window, select a recipient from the Online Users panel by clicking on their name (e.g., "Bob"). The selected recipient will be highlighted in green. You will not need to select if there is only one other person in the room.
 2. Type a message in the input box: (e.g., `Hello Bob!`).
 3. Click the Send button.
 4. The message will appear in:
     * Your chat window (as "Alice → Bob: Hello Bob!")
     * Bob's chat window (as "Alice: Hello Bob!"
 5. Bob can now reply by selecting "Alice" and typing a response.
-6. To disconnect, simply close the browser tab or window. The WebSocket connection closes and the Python client process terminates.
+6. To disconnect, simply close the browser tab or window. The WebSocket connection closes and the Python client process terminates when all windows are closed.
 
 ## **5\. Technical Protocol Details (JSON over TCP & Inter-Process Communication)**
 
