@@ -121,7 +121,7 @@ npm run dev
     * Your chat window (as "Alice → Bob: Hello Bob!")
     * Bob's chat window (as "Alice: Hello Bob!"
 5. Bob can now reply by selecting "Alice" and typing a response.
-6. To disconnect, simply close the browser tab or window. The WebSocket connection closes and the Python client process terminates when all windows are closed.
+6. To disconnect, simply close the browser tab. The WebSocket connection closes and Python client process for that user closes. The Python server process terminates when all windows are closed.
 
 ## **5\. Technical Protocol Details (JSON over TCP & Inter-Process Communication)**
 
