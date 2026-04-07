@@ -181,11 +181,11 @@ We designed a custom application-layer protocol for data exchange across three d
 <span style="color: purple;">***RUBRIC NOTE: List all references used and help you got. Below is an example.***</span>
 
 * **Code Origin:**  
-  * The socket boilerplate was adapted from the course tutorial "TCP Echo Server". The core multithreaded game logic, protocol, and state management were written by the group.  
-* **GenAI Usage:**  
-  * ChatGPT was used to assist in generating the Unicode box-drawing characters for the CLI interface, and to help structure the TCP buffer-splitting logic (`\n delimiter`).  
-  * Deepseek was used to help in `README.md` writing and polishing.  
-  * GitHub Copilot was used to help plan the workflow of the application.   
+  * No outright Boiler plates were used. Functions were either hand made or altered by copilot or chatgpt for debugging.  
+  * **Gen AI Usage:**  
+  * ChatGPT was used to create a roadmap on where to begin and for brainstorming. It also assisted in debugging functions that weren’t working.
+  * GitHub Copilot was used in assisting with generating encryption and decryption functions. Some functions were handmade but were later altered if there were bugs with the help of GitHub Copilot.
+  * DeepSeek assisted in the creation of the README.md.
 * **References:**  
  * [Python Socket Programming HOWTO](https://docs.python.org/3/howto/sockets.html)  
  * [Real Python: Intro to Python Threading](https://realpython.com/intro-to-python-threading/)
